@@ -4,24 +4,30 @@ let invaderHP = 300;
 let spaceShipHP = 1000;
 let spaceShipLVL = 1;
 let spaceShipLVLup = 200;
-let vocabularyToBeLearnedCase = [];
+let vocabularyCase = [];
 
-function init() {
-  loadData();
+async function init() {
+  let vocabulary_db = "db1/";
+  let vocabularyResponse = await loadData(vocabulary_db);
+  
+  let vocabularyArray = Object.keys(vocabularyResponse);
+  for (let i = 1; i < vocabularyArray.length; i++) {
+    vocabularyCase.push(
+      {
+        germenWord: vocabularyResponse[i].germenWord,
+        englishWord: vocabularyResponse[i].englishWord
+      }
+    )
+  }
+  console.log(vocabularyCase[0].englishWord);
   renderQuestion();
 }
 
-async function loadData() {
-  let response = await fetch(BASE_URL + ".json");
-  let vocabulary = await response.json();
-
-  console.log(vocabulary.db1[1].englishWort);
-  
+async function loadData(vocabulary_db) {
+  let response = await fetch(BASE_URL + vocabulary_db + ".json");
+  let vocabularyAsJSON = await response.json();
+  return vocabularyAsJSON;
 }
-
-// for (let vocabularyIndex = 0; vocabularyIndex < vocabulary_db.length; vocabularyIndex++) {
-//   vocabularyToBeLearnedCase.push(vocabulary_db[vocabularyIndex]);
-// }
 
 addEventListener('keydown', (e) => {
   if (e.repeat) return;
@@ -30,22 +36,22 @@ addEventListener('keydown', (e) => {
   }
 });
 
-function renderQuestion() {
+async function renderQuestion() {
   let refGermanWord = document.getElementById('germanWord');
   let refMessage = document.getElementById('message');
   let done = document.getElementById('done');
 
-  if (vocabularyToBeLearnedCase.length == 0) {
+  if (vocabularyCase.length == 0) {
     winSeq(refMessage);
     return;
-  } 
-  rendomIndexNum = Math.floor(Math.random() * vocabularyToBeLearnedCase.length);
-  let germanWord = vocabularyToBeLearnedCase[rendomIndexNum].germenWord;
+  }
+  rendomIndexNum = Math.floor(Math.random() * vocabularyCase.length);
+
 
   refGermanWord.innerHTML = germanWord;
   renderHP()
 
-  done.innerHTML = `Done: ${vocabulary_db.length - vocabularyToBeLearnedCase.length} / ${vocabulary_db.length}`;
+  done.innerHTML = `Done: ${vocabulary_db.length - vocabularyCase.length} / ${vocabulary_db.length}`;
 }
 
 function submitAnswer() {
@@ -131,7 +137,7 @@ function gameOverSeq(refMessage, refRightAnswer) {
 function winSeq(refMessage) {
   let refGermanQuestion = document.getElementById('germanQuestion');
   let refSubmit = document.getElementById('submitSection');
-  
+
   refMessage.innerHTML = 'You Win!!!';
   refGermanQuestion.innerHTML = '!!!Hervoragend!!! <br> Push "Strg + R" to restart your training';
   refSubmit.style.display = 'none'
