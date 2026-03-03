@@ -25,4 +25,38 @@
 .menu_button:hover {
   cursor: pointer;
   color: green;
-} 
+}
+
+#menuDialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  border-radius: 16px;
+  background-color: #119893;
+  width: 200px;
+  height: 300px;
+}
+
+.input_space {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input_space button{
+  width: 150px;
+  font-size: 16px;
+  font-weight: 500;
+  background: #d2d2d2;
+}
+
+.input_space label{
+  font-size: 20px;
+  font-weight: 550;
+}

@@ -141,3 +141,16 @@ function winSeq(refMessage) {
   refGermanQuestion.innerHTML = '!!!Hervoragend!!! <br> Push "Strg + R" to restart your training';
   refSubmit.style.display = 'none'
 }
+
+function selectName(name) {
+  let refLiamVocabulary = document.getElementById('liamVocabulary');
+  let refAliaVocabulary = document.getElementById('aliaVocabulary');
+
+  if (name === 'liam') {
+    refLiamVocabulary.style.backgroundColor = 'lightblue';
+    refAliaVocabulary.style.backgroundColor = '#d2d2d2';
+  } else if (name === 'alia') {
+    refAliaVocabulary.style.backgroundColor = 'lightblue';
+    refLiamVocabulary.style.backgroundColor = '#d2d2d2';
+  }
+}
