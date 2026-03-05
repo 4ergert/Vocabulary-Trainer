@@ -7,6 +7,15 @@ function getSelectNameAndBlockTemplate() {
   `;
 }
 
+function getSelectNameAndBlockTemplateForAdd() {
+  return `
+  <h2><br> Please select <br> a <span>name</span> and <br> a <span>vocabulary</span> block <br> to add new vocabulary to the database!</h2>
+  <section class="input_space">
+    <button onclick="showMenu()" type="button">go back</button>
+  </section>
+  `;
+}
+
 function getAddVocabularyTemplate() {
   return `
     <h2><br> Please add new <br> vocabulary to the <br> database!</h2>
@@ -17,6 +26,33 @@ function getAddVocabularyTemplate() {
       <input id="englishWordInput" type="text">
       <button onclick="addToDatabase()" type="button">add to database</button>
       <button onclick="showMenu()" type="button">go back</button>
+    </section>
+  `;
+}
+
+function getFillInBothFieldsTemplate() {
+  return `
+    <h2><br> Please fill in both fields! <br> Try again!</h2>
+    <section class="input_space">
+      <button onclick="addVocabulary()" type="button">go back</button>
+    </section>
+  `;
+}
+
+function getVocabularyAddedSuccessfullyTemplate() {
+  return `
+    <h2><br> Vocabulary added successfully!</h2>
+    <section class="input_space">
+      😊
+    </section>
+  `;
+}
+
+function getVocabularyAddFailedTemplate() {
+  return `
+    <h2><br> Failed to add vocabulary! <br> Please try again later!</h2>
+    <section class="input_space">
+      😞
     </section>
   `;
 }

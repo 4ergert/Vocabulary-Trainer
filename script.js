@@ -22,16 +22,18 @@ async function init() {
 
 async function fetchAndRenderVocabulary() {
   let vocabularyResponse = await loadData(firebaseVocabulary);
+
   let vocabularyArray = Object.keys(vocabularyResponse);
-  for (let i = 1; i < vocabularyArray.length; i++) {
+  for (let i = 0; i < vocabularyArray.length; i++) {
     vocabularyCase.push(
       {
-        germenWord: vocabularyResponse[i].germenWord,
-        englishWord: vocabularyResponse[i].englishWord
+        germenWord: vocabularyResponse[vocabularyArray[i]].germenWord,
+        englishWord: vocabularyResponse[vocabularyArray[i]].englishWord
       }
     )
   }
-  renderQuestion();
+  await renderQuestion();
+  return vocabularyCase;
 };
 
 
@@ -197,11 +199,6 @@ function showMenu() {
   refMenuDialog.style.display = 'flex';
 }
 
-function addVocabulary() {
-  let refMenuDialog = document.getElementById('menuDialog');
-  refMenuDialog.innerHTML = getAddVocabularyTemplate();
-}
-
 async function showVocabulary() {
   let refMenuDialog = document.getElementById('menuDialog');
   await fetchAndRenderVocabulary();
@@ -213,28 +210,47 @@ async function showVocabulary() {
   refMenuDialog.innerHTML = vocabularyListHTML;
 }
 
-function addToDatabase() {
-  let refGermenWordInput = document.getElementById('germenWordInput');
-  let refEnglishWordInput = document.getElementById('englishWordInput');
-  if (refGermenWordInput.value == '' || refEnglishWordInput.value == '') {
-    alert('Please fill in both fields!');
+function addVocabulary() {
+  let refMenuDialog = document.getElementById('menuDialog');
+  if (BASE_URL == '' || firebaseVocabulary == undefined) {
+    refMenuDialog.innerHTML = getSelectNameAndBlockTemplateForAdd();
     return;
   }
+  refMenuDialog.innerHTML = getAddVocabularyTemplate();
+}
+
+async function addToDatabase() {
+  let refMenuDialog = document.getElementById('menuDialog');
+  let refGermenWordInput = document.getElementById('germenWordInput');
+  let refEnglishWordInput = document.getElementById('englishWordInput');
+
+  if (refGermenWordInput.value == '' || refEnglishWordInput.value == '') {
+    refMenuDialog.innerHTML = getFillInBothFieldsTemplate();
+    return;
+  }
+
   let newVocabulary = {
     germenWord: refGermenWordInput.value,
     englishWord: refEnglishWordInput.value
   };
-  fetch(BASE_URL + firebaseVocabulary + ".json", {
-    method: 'POST',
-    body: JSON.stringify(newVocabulary)
-  })
-    .then(response => response.json())
-    .then(_data => {
-      alert('Vocabulary added successfully!');
-      showMenu();
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('Failed to add vocabulary.');
+
+  try {
+    const response = await fetch(BASE_URL + firebaseVocabulary + ".json", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newVocabulary)
     });
+    const data = await response.json();
+    refMenuDialog.innerHTML = getVocabularyAddedSuccessfullyTemplate();
+    refGermenWordInput.value = '';
+    refEnglishWordInput.value = '';
+    setTimeout(() => {
+      addVocabulary();
+    }, 1500);
+  } catch (error) {
+    console.error('Error:', error);
+    refMenuDialog.innerHTML = getVocabularyAddFailedTemplate();
+  }
 }
