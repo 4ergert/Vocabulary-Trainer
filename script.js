@@ -1,6 +1,7 @@
 const LIAMS_BASE_URL = 'https://vocabularydb-d1be5-default-rtdb.europe-west1.firebasedatabase.app/';
 const ALIAS_BASE_URL = 'https://alias-vocabulary-8f745-default-rtdb.europe-west1.firebasedatabase.app/';
 const ADD_VOCAB_PASSWORD = 'alpha';
+let passwordWasCorrect = false;
 let BASE_URL = '';
 let rendomIndexNum = 0;
 let invaderHP = 300;
@@ -222,6 +223,11 @@ function addVocabulary() {
     refMenuDialog.innerHTML = getSelectNameAndBlockTemplateForAdd();
     return;
   }
+
+  if (passwordWasCorrect == true) {
+    refMenuDialog.innerHTML = getAddVocabularyTemplate();
+    return;
+  }
   refMenuDialog.innerHTML = getAddVocabularyPasswordTemplate();
 }
 
@@ -239,6 +245,7 @@ function verifyAddVocabularyPassword() {
   }
 
   refMenuDialog.innerHTML = getAddVocabularyTemplate();
+  passwordWasCorrect = true;
 }
 
 async function addToDatabase() {
