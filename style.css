@@ -111,10 +111,21 @@
   gap: 8px;
   position: relative;
   left: 34%;
+  animation: invaderMoveSide 1.2s ease-in-out infinite alternate;
   font-size: 24px;
   font-weight: 600;
   color: #00ffd9;
   text-shadow: 1px 2px #ff0095;
+}
+
+@keyframes invaderMoveSide {
+  0% {
+    transform: translateX(-9px);
+  }
+
+  100% {
+    transform: translateX(9px);
+  }
 }
 
 .invader_shoot {
@@ -149,10 +160,21 @@
   gap: 8px;
   position: relative;
   left: 12%;
+  animation: shipMoveSide 1.3s ease-in-out infinite alternate;
   font-size: 24px;
   font-weight: 600;
   color: #00ffd9;
   text-shadow: 1px 2px #ff0095;
+}
+
+@keyframes shipMoveSide {
+  0% {
+    transform: translateX(-6px);
+  }
+
+  100% {
+    transform: translateX(6px);
+  }
 }
 
 .spaceship_shoot {
