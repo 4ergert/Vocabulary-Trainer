@@ -12,6 +12,26 @@ let firebaseVocabulary;
 let vocabularyCase = [];
 let learnedVocabulary = [];
 
+window.addEventListener('DOMContentLoaded', setupExclusiveDropdownGroups);
+
+function setupExclusiveDropdownGroups() {
+  const dropdownGroups = document.querySelectorAll('.dropdown_group');
+
+  dropdownGroups.forEach((dropdown) => {
+    dropdown.addEventListener('toggle', () => {
+      if (!dropdown.open) {
+        return;
+      }
+
+      dropdownGroups.forEach((otherDropdown) => {
+        if (otherDropdown !== dropdown) {
+          otherDropdown.open = false;
+        }
+      });
+    });
+  });
+}
+
 async function init() {
   const refDialog = document.getElementById('menuDialog');
   if (BASE_URL == '' || firebaseVocabulary == undefined) {
@@ -302,6 +322,7 @@ async function tryAndCatchToDatabase(newVocabulary, refMenuDialog, refGermenWord
   }
 }
 
+//Levenshtein-Toleranz: <= 0 statt <= 1, da Google oft sehr passende Vorschläge macht, die sich aber in einem Buchstaben unterscheiden (z.B. "hause" statt "haus") - das soll dann nicht als Fehler gewertet werden
 async function confirmSpellingWithGoogle(germanWord, englishWord) {
   const germanCheck = await checkGoogleSpelling(germanWord, 'de');
   const englishCheck = await checkGoogleSpelling(englishWord, 'en');
@@ -350,7 +371,7 @@ async function checkGoogleSpelling(word, languageCode) {
     });
 
     const firstSuggestion = normalizeSuggestion(suggestions[0]);
-    const isVeryClose = levenshteinDistance(normalizedWord, firstSuggestion) <= 1;
+    const isVeryClose = levenshteinDistance(normalizedWord, firstSuggestion) <= 0;
 
     if (hasExactMatch || hasCompletionMatch || isVeryClose) {
       return { isLikelyCorrect: true, suggestion: suggestions[0] };
