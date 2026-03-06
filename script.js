@@ -32,6 +32,20 @@ function setupExclusiveDropdownGroups() {
   });
 }
 
+function goToNextDropdownGroup(currentIndex) {
+  const dropdownGroups = document.querySelectorAll('.dropdown_group');
+  const currentGroup = dropdownGroups[currentIndex];
+  const nextGroup = dropdownGroups[currentIndex + 1];
+
+  if (currentGroup) {
+    currentGroup.open = false;
+  }
+
+  if (nextGroup) {
+    nextGroup.open = true;
+  }
+}
+
 async function init() {
   const refDialog = document.getElementById('menuDialog');
   if (BASE_URL == '' || firebaseVocabulary == undefined) {
@@ -197,39 +211,50 @@ function explodeInvader() {
 function selectName(name) {
   let refLiamVocabulary = document.getElementById('liamVocabulary');
   let refAliaVocabulary = document.getElementById('aliaVocabulary');
+  let refSummaryName = document.getElementById('summary_name');
 
   if (name === 'liam') {
     BASE_URL = LIAMS_BASE_URL;
+    refSummaryName.innerHTML = 'Liam';
     refLiamVocabulary.style.backgroundColor = '#00ff00';
     refLiamVocabulary.style.fontWeight = 'bold';
     refAliaVocabulary.style.backgroundColor = '#d2d2d2';
     refAliaVocabulary.style.fontWeight = 'normal';
   } else if (name === 'alia') {
     BASE_URL = ALIAS_BASE_URL;
+    let refSummaryName = document.getElementById('summary_name');
+    refSummaryName.innerHTML = 'Alia';
     refAliaVocabulary.style.backgroundColor = '#00ff00';
     refAliaVocabulary.style.fontWeight = 'bold';
     refLiamVocabulary.style.backgroundColor = '#d2d2d2';
     refLiamVocabulary.style.fontWeight = 'normal';
   }
+
+  goToNextDropdownGroup(0);
 }
 
 function selectBlock(db) {
   let refBlock1 = document.getElementById('block1');
   let refBlock2 = document.getElementById('block2');
+  let refSummaryBlock = document.getElementById('summary_vocabulary');
 
   if (db === 'block1') {
     firebaseVocabulary = "db1/";
+    refSummaryBlock.innerHTML = 'Block 1';
     refBlock1.style.backgroundColor = '#00ff00';
     refBlock2.style.backgroundColor = '#d2d2d2';
     refBlock1.style.fontWeight = 'bold';
     refBlock2.style.fontWeight = 'normal';
   } else if (db === 'block2') {
     firebaseVocabulary = "db2/";
+    refSummaryBlock.innerHTML = 'Block 2';
     refBlock2.style.backgroundColor = '#00ff00';
     refBlock1.style.backgroundColor = '#d2d2d2';
     refBlock2.style.fontWeight = 'bold';
     refBlock1.style.fontWeight = 'normal';
   }
+
+  goToNextDropdownGroup(1);
 }
 
 function showMenu() {
